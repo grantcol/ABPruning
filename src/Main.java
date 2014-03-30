@@ -7,7 +7,7 @@ public class Main {
 	static TreeBuilder tb = new TreeBuilder("input.txt");
 	
 	public static void main(String [] args) throws IOException{
-		gt = tb.buildTree();
+		gt = tb.initTree();
 		gt.print();
 	}
 }

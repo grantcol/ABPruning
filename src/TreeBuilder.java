@@ -14,7 +14,7 @@ public class TreeBuilder {
 		this.path = path;
 	}
 	
-	public GameTree buildTree() throws IOException { 
+	public GameTree initTree() throws IOException { 
 		
 		List<String> lines = new ArrayList<String>();
 		reader = new BufferedReader(new FileReader(path));
@@ -24,7 +24,8 @@ public class TreeBuilder {
 			lines.add(line);
 		}
 		GameTree gt = new GameTree(lines);
-		
+		System.out.println("Starting");
+		gt.populate(gt.getRoot());
 		return gt;
 	}
 }
