@@ -24,7 +24,6 @@ public class TreeBuilder {
 			lines.add(line);
 		}
 		GameTree gt = new GameTree(lines);
-		//System.out.println("Starting");
 		gt.populate(gt.getRoot(), 1);
 		return gt;
 	}

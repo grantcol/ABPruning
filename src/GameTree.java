@@ -20,11 +20,7 @@ public class GameTree {
 	public void populate(GameTreeNode gtn, int player){
 		gtn.addChildren(findLegalMoves(gtn, player));
 		if(!gtn.children.isEmpty()){
-			System.out.println("NODES FOUND: "+gtn.children.size());
-			for(int i = 0; i < gtn.children.size(); i++){
-			//for(GameTreeNode n : gtn.children){
-				GameTreeNode n = gtn.children.get(i);
-				System.out.println("WORKING ON: "+i);
+			for(GameTreeNode n : gtn.children){
 				populate(n, switchTurn(player));
 			}
 		}
@@ -33,7 +29,6 @@ public class GameTree {
 		List<GameTreeNode> children = new ArrayList<GameTreeNode>();
 		List<List<String>> legalMoves = gtn.board.legalMoves(player);
 		for(List<String> m : legalMoves){
-			//System.out.println(m.toString());
 			GameTreeNode child = new GameTreeNode(m);
 			children.add(child);
 		}
