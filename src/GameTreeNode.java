@@ -56,6 +56,8 @@ public class GameTreeNode {
 
 			//a list of posible board configs we discover as new moves
 			List<List<String>> newBoards = new ArrayList<List<String>>();
+			System.out.println("ORIGINAL");
+			printAsBoard(board);
 			if(player == 1){
 				for(int i = board.size()-1; i >= 0; i--){
 
@@ -67,8 +69,8 @@ public class GameTreeNode {
 					//System.out.println(p+" "+board.get(i)+": "+board.get(i).equals(p)+" space "+i+" goal "+goal+", ahead "+ahead+", rdiag "+rdiag+", ldiag "+ldiag);
 					//if the current slot is on the far left
 					if(i % 3 == 0){
-						if( ahead > goal && board.get(i).equals(p) && !board.get(ahead).equals(p)){
-							System.out.println(" LEFT AHEAD");
+						System.out.println("Left");
+						if( ahead > goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
@@ -77,7 +79,6 @@ public class GameTreeNode {
 							//System.out.println(moveAhead.toString());
 						}
 						if(rdiag > goal && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
-							System.out.println("LEFT RDIAG");
 							List<String> moveRightDiag = new ArrayList<String>(board);
 							moveRightDiag.set(rdiag, moveRightDiag.get(i));
 							moveRightDiag.set(i, empty);
@@ -87,7 +88,8 @@ public class GameTreeNode {
 					}
 					//far right
 					else if((i+1) % 3 == 0){
-						if( ahead > goal && board.get(i).equals(p) && !board.get(ahead).equals(p)){
+						System.out.println("Right "+ i);
+						if( ahead > goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
@@ -104,7 +106,8 @@ public class GameTreeNode {
 					}
 					//middle
 					else{
-						if( ahead > goal && board.get(i).equals(p) && !board.get(ahead).equals(p)){
+						System.out.println("Middle");
+						if( ahead > goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
