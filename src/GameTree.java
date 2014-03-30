@@ -21,7 +21,10 @@ public class GameTree {
 		gtn.addChildren(findLegalMoves(gtn, 1));
 		if(!gtn.children.isEmpty()){
 			System.out.println("NODES FOUND: "+gtn.children.size());
-			for(GameTreeNode n : gtn.children){
+			for(int i = 0; i < gtn.children.size(); i++){
+			//for(GameTreeNode n : gtn.children){
+				GameTreeNode n = gtn.children.get(i);
+				System.out.println("WORKING ON: "+i);
 				populate(n);
 			}
 		}
