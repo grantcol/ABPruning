@@ -21,15 +21,15 @@ public class GameTree {
 		gtn.addChildren(findLegalMoves(gtn, player));
 		if(!gtn.children.isEmpty()){
 			for(GameTreeNode n : gtn.children){
-				n.board.print();
-				System.out.println(" __________________________ ");
+				System.out.println("children: "+gtn.children.size());
+				//gtn.board.print();
 				populate(n, switchTurn(player));
 			}
 		}
 		else{
-			gtn.score = gtn.board.winState();
-			//System.out.println(gtn.score);
 			//gtn.board.print();
+			//gtn.score = gtn.board.winState();
+			//System.out.println(gtn.score);
 		}
 	}
 	public List<GameTreeNode> findLegalMoves(GameTreeNode gtn, int player){
@@ -39,16 +39,16 @@ public class GameTree {
 			GameTreeNode child = new GameTreeNode(m);
 			children.add(child);
 		}
-		return children;
+		if(children.size() > 0)
+			return children;
+		else return null;
 	}
 	public int switchTurn(int currentPlayer){
 		switch (currentPlayer){
-		case 0:
-			return 1;
 		case 1:
 			return 2;
 		case 2:
-			return 0;
+			return 1;
 		}
 		return -1;
 	}

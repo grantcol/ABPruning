@@ -54,7 +54,6 @@ public class GameTreeNode {
 
 			//a list of posible board configs we discover as new moves
 			List<List<String>> newBoards = new ArrayList<List<String>>();
-			//printAsBoard(board);
 			if(player == 1){
 				for(int i = board.size()-1; i >= 0; i--){
 
@@ -71,14 +70,14 @@ public class GameTreeNode {
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
 							newBoards.add(moveAhead);
-							//printAsBoard(moveAhead);
+							printAsBoard(moveAhead);
 						}
 						if(rdiag > goal && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
 							List<String> moveRightDiag = new ArrayList<String>(board);
 							moveRightDiag.set(rdiag, moveRightDiag.get(i));
 							moveRightDiag.set(i, empty);
 							newBoards.add(moveRightDiag);
-							//printAsBoard(moveRightDiag);
+							printAsBoard(moveRightDiag);
 						}
 					}
 					//far right
@@ -88,14 +87,14 @@ public class GameTreeNode {
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
 							newBoards.add(moveAhead);
-							//printAsBoard(moveAhead);
+							printAsBoard(moveAhead);
 						}
 						if(ldiag > goal && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
 							List<String> moveLeftDiag = new ArrayList<String>(board);
 							moveLeftDiag.set(ldiag, moveLeftDiag.get(i));
 							moveLeftDiag.set(i, empty);
 							newBoards.add(moveLeftDiag);
-							//printAsBoard(moveLeftDiag);
+							printAsBoard(moveLeftDiag);
 						}
 					}
 					//middle
@@ -105,14 +104,14 @@ public class GameTreeNode {
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
 							newBoards.add(moveAhead);
-							//printAsBoard(moveAhead);
+							printAsBoard(moveAhead);
 						}
 						if(rdiag > goal && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
 							List<String> moveRightDiag = new ArrayList<String>(board);
 							moveRightDiag.set(rdiag, moveRightDiag.get(i));
 							moveRightDiag.set(i, empty);
 							newBoards.add(moveRightDiag);
-							//printAsBoard(moveRightDiag);
+							printAsBoard(moveRightDiag);
 
 						}
 						if(ldiag > goal && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
@@ -120,7 +119,7 @@ public class GameTreeNode {
 							moveLeftDiag.set(ldiag, moveLeftDiag.get(i));
 							moveLeftDiag.set(i, empty);
 							newBoards.add(moveLeftDiag);
-							//printAsBoard(moveLeftDiag);
+							printAsBoard(moveLeftDiag);
 						}
 					}
 				}
@@ -130,59 +129,63 @@ public class GameTreeNode {
 
 					int goal = 18;
 					int ahead = i+3;
-					int ldiag = i+4;
-					int rdiag = i+2;
+					int ldiag = i+2;
+					int rdiag = i+4;
 
 					//System.out.println(p+" "+board.get(i)+": "+board.get(i).equals(p)+" space "+i+" goal "+goal+", ahead "+ahead+", rdiag "+rdiag+", ldiag "+ldiag);
 					//if the current slot is on the far left
 					if(i % 3 == 0){
-						if( ahead < goal && board.get(i).equals(p) && !board.get(ahead).equals(p)){
+						
+						if( ahead < goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
+							System.out.println("PLACE IS : "+i);
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
 							newBoards.add(moveAhead);
-							//printAsBoard(moveAhead);
-							//System.out.println(moveAhead.toString());
+							printAsBoard(moveAhead);
+							System.out.println(moveAhead.toString());
 						}
 						if(rdiag < goal && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
+							System.out.println("PLACE ISNT : "+i);
 							List<String> moveRightDiag = new ArrayList<String>(board);
 							moveRightDiag.set(rdiag, moveRightDiag.get(i));
 							moveRightDiag.set(i, empty);
 							newBoards.add(moveRightDiag);
-							//printAsBoard(moveRightDiag);
+							printAsBoard(moveRightDiag);
 						}
 					}
 					//far right
 					else if((i+1) % 3 == 0){
-						if( ahead < goal && board.get(i).equals(p) && !board.get(ahead).equals(p)){
+						if( ahead < goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
 							newBoards.add(moveAhead);
-							
+							printAsBoard(moveAhead);
 						}
 						if(ldiag < goal && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
 							List<String> moveLeftDiag = new ArrayList<String>(board);
 							moveLeftDiag.set(ldiag, moveLeftDiag.get(i));
 							moveLeftDiag.set(i, empty);
 							newBoards.add(moveLeftDiag);
+							printAsBoard(moveLeftDiag);
 						}
 					}
 					//middle
 					else{
-						if( ahead < goal && board.get(i).equals(p) && !board.get(ahead).equals(empty)){
+						if( ahead < goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
 							newBoards.add(moveAhead);
-							//printAsBoard(moveAhead);
+							printAsBoard(moveAhead);
 						}
 						if(rdiag < goal && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
 							List<String> moveRightDiag = new ArrayList<String>(board);
 							moveRightDiag.set(rdiag, moveRightDiag.get(i));
 							moveRightDiag.set(i, empty);
 							newBoards.add(moveRightDiag);
-							//printAsBoard(moveRightDiag);
+							printAsBoard(moveRightDiag);
 
 						}
 						if(ldiag < goal && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
@@ -190,7 +193,6 @@ public class GameTreeNode {
 							moveLeftDiag.set(ldiag, moveLeftDiag.get(i));
 							moveLeftDiag.set(i, empty);
 							newBoards.add(moveLeftDiag);
-							//printAsBoard(moveLeftDiag);
 						}
 					}
 				}
