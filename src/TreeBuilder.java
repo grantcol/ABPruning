@@ -24,7 +24,7 @@ public class TreeBuilder {
 			lines.add(line);
 		}
 		GameTree gt = new GameTree(lines);
-		gt.getRoot().score = gt.populate(gt.getRoot(), 1);
+		gt.maxValue(gt.getRoot(), 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
 		return gt;
 	}
 }

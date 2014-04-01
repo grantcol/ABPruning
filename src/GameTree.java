@@ -17,41 +17,46 @@ public class GameTree {
 		return this.root;
 	}
 
-	public int populate(GameTreeNode gtn, int player){
+	public int maxValue(GameTreeNode gtn, int player, int alpha, int beta){
 		if(gtn.board.winState() != 0){
 			return gtn.board.winState();
 		}
 		gtn.addChildren(findLegalMoves(gtn, player));
-		if(!gtn.children.isEmpty()){
-			for(GameTreeNode n : gtn.children){
-				System.out.println(n+" has "+gtn.children.size()+" children" );
-				populate(n, switchTurn(player));
+		for(GameTreeNode n : gtn.children){
+			alpha = Math.max(alpha, minValue(n, 1, alpha, beta));
+			if(alpha >= beta){
+				return alpha;
 			}
 		}
-		return 0;
-		
+		return alpha; 
 	}
-	public List<GameTreeNode> findLegalMoves(GameTreeNode gtn, int player){
-		List<GameTreeNode> children = new ArrayList<GameTreeNode>();
-		List<List<String>> legalMoves = new ArrayList<List<String>>(gtn.board.legalMoves(player));
-		for(List<String> m : legalMoves){
-			GameTreeNode child = new GameTreeNode(m);
-			children.add(child);
-		}
-			return children;
 
-	}
-	public int switchTurn(int currentPlayer){
-		switch (currentPlayer){
-		case 1:
-			return 2;
-		case 2:
-			return 1;
+	
+	
+	public int minValue(GameTreeNode gtn, int player, int alpha, int beta){
+		if(gtn.board.winState() != 0){
+			//gtn.score = gtn.board.winState();
+			return gtn.board.winState();
 		}
-		return -1;
+		gtn.addChildren(findLegalMoves(gtn, player));
+		System.out.println("chirren "+gtn.children.size());
+		for(GameTreeNode n : gtn.children){
+			beta = Math.min(beta, maxValue(n,2, alpha, beta));
+			if(beta >= alpha){
+				return beta;
+			}
+		}
+		return beta;
+	}
+	
+	public List<GameTreeNode> findLegalMoves(GameTreeNode gtn, int player){
+		List<GameTreeNode> children = new ArrayList<GameTreeNode>(gtn.board.legalMoves(player));
+		return children;
+
 	}
 	public void print(){
 		System.out.println("Root config is: ");
 		root.board.print();
+		System.out.println(root.score);
 	}
 }
