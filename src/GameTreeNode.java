@@ -9,11 +9,13 @@ public class GameTreeNode {
 	//public String moveDescription;
 	public List<GameTreeNode> children;
 	public Board board;
+	public boolean maxToMove;
 	public int score;
 
-	public GameTreeNode(List<String> initConfig){
+	public GameTreeNode(List<String> initConfig, boolean maxToMove){
 		this.children = new ArrayList<GameTreeNode>();
-		this.board = new Board(initConfig);
+		this.board = new Board(initConfig, true);
+		this.maxToMove = maxToMove;
 	}
 
 	public GameTreeNode(){
@@ -21,15 +23,26 @@ public class GameTreeNode {
 	}
 
 	public void addChildren(List<GameTreeNode> clist){
-		//this.children = clist;
 		for(GameTreeNode gtn : clist){
 			this.children.add(gtn);
 		}
 	}
 
+	public boolean isTerminal(){
+		if(board.winState(this)){
+			return true;
+		}
+		return false;
+	}
+
+
+
+
+
 	public class Board {
 		//board spaces read from the top down ie (0,0) = 0 (0,1) = 1
 		public List<String> board = new ArrayList<String>();
+		public char[][] boardState = new char[6][3]; 
 		Map<Integer, String> placeValues = new HashMap<Integer, String>();
 
 		public Board(List<String> rows) {
@@ -56,10 +69,111 @@ public class GameTreeNode {
 			for(int i = 0; i < rows.size(); i++){
 
 				String[] slots = rows.get(i).split("");
-
 				for(String s : slots) {
 					if(!s.isEmpty()){ //this a pretty shitty way to guard against newline
 						this.board.add(s);
+					}
+				}
+
+			}
+		}
+		public Board(List<String> rows, boolean dumb){
+			for(int i = 0; i < 6; i++){
+				for(int j = 0; j < 3; j++){
+					this.boardState[i][j] = rows.get(i).charAt(j);
+					System.out.println(this.boardState[i][j]);
+				}
+			}
+		}
+
+		public void makeLegalMoves(GameTreeNode node){
+			char empty = 'X';
+			char opp = 'N';
+			char self = 'N';
+			//first check the bias of the node passed in 
+			if(node.maxToMove){
+				//it is player 1's turn (White)
+				opp = 'B';
+				self = 'W';
+				for(int i = 0; i < 6; i++){
+					for(int j = 0; j < 3; j++){
+						if(i > 0 && node.board.boardState[i][j] == self){
+							//if we are looking at a white space and are not in the victory row
+
+							if(j == 1){
+								//if we are in the middle column we can move lrdiag and fwd
+
+								//forward
+								if(node.board.boardState[i-1][j] == empty){
+									//GameTreeNode move = new GameTreeNode(node.board)
+								}
+								if(node.board.boardState[i-1][j+1] == empty || node.board.boardState[i-1][j+1] == opp){
+
+								}
+								if(node.board.boardState[i-1][j-1] == empty || node.board.boardState[i-1][j-1] == opp){
+									
+								}
+							}
+
+							else if(j == 0){
+								//we are in the left column we can move rdiag and fwd
+								if(node.board.boardState[i-1][j] == empty){
+
+								}
+								if(node.board.boardState[i-1][j+1] == empty || node.board.boardState[i-1][j+1] == opp){
+
+								}
+							}
+							else if(j == 2){
+								//we are in the right column we can move ldiag and fwd
+								if(node.board.boardState[i-1][j] == empty){
+
+								}
+								if(node.board.boardState[i-1][j-1] == empty || node.board.boardState[i-1][j-1] == opp){
+
+								}
+							}
+						}
+					}
+				}
+			}
+			else {
+				opp = 'W';
+				self = 'B';
+				//it is player 2's turn (Black)
+				for(int i = 0; i < 6; i++){
+					for(int j = 0; j < 3; j++){
+						if(i < 5 && node.board.boardState[i][j] == self){
+							if(j == 1){
+								//middle
+								if(node.board.boardState[i+1][j] == empty){
+									
+								}
+								if(node.board.boardState[i+1][j-1] == empty || node.board.boardState[i+1][j-1] == opp){
+									
+								}
+								if(node.board.boardState[i+1][j+1] == empty || node.board.boardState[i+1][j+1] == opp){
+									
+								}
+							}
+							else if(j == 0){
+								//right
+								if(node.board.boardState[i+1][j] == empty){
+									
+								}
+								if(node.board.boardState[i+1][j+1] == empty || node.board.boardState[i+1][j+1] == opp){
+									
+								}
+							}
+							else if(j == 2){
+								if(node.board.boardState[i+1][j] == empty){
+									
+								}
+								if(node.board.boardState[i+1][j-1] == empty || node.board.boardState[i+1][j-1] == opp){
+									
+								}
+							}
+						}
 					}
 				}
 			}
@@ -78,103 +192,72 @@ public class GameTreeNode {
 				break;
 			}
 			System.out.println("P: "+p);
-			//a list of posible board configs we discover as new moves
 			List<GameTreeNode> newBoards = new ArrayList<GameTreeNode>();
 			if(player == 1){
 				for(int i = board.size()-1; i >= 0; i--){
 
-					int goal = 0;
+					//int goal = 0;
 					int ahead = i-3;
 					int ldiag = i-4;
 					int rdiag = i-2;
 
-					//System.out.println(p+" "+board.get(i)+": "+board.get(i).equals(p)+" space "+i+" goal "+goal+", ahead "+ahead+", rdiag "+rdiag+", ldiag "+ldiag);
-					//if the current slot is on the far left
+					//far left
 					if(i % 3 == 0){
-						System.out.println("W @ LEFT SLOT");
-						if( ahead > goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
-							System.out.println("W CAN MOVE FORWARD");
+						if( ahead >= 0 && board.get(i).equals(p) && board.get(ahead).equals(empty)){
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveAhead);
+							GameTreeNode gtn = new GameTreeNode(moveAhead, true);
 							newBoards.add(gtn);
-							//printAsBoard(moveAhead);
-							//printMove(i, ahead, p);
 						}
-						if(rdiag > goal && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
-							System.out.println("W CAN MOVE RIGHT");
+						if(rdiag >= 1 && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
 							List<String> moveRightDiag = new ArrayList<String>(board);
 							moveRightDiag.set(rdiag, moveRightDiag.get(i));
 							moveRightDiag.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveRightDiag);
+							GameTreeNode gtn = new GameTreeNode(moveRightDiag, true);
 							newBoards.add(gtn);
-							//printAsBoard(moveRightDiag);
-							//printMove(i, rdiag, p);
 						}
 					}
 					//far right
 					else if((i+1) % 3 == 0){
-						System.out.println("W @ RIGHT SLOT");
-						if( ahead > goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
-							System.out.println("W CAN MOVE FORWARD");
+						if( ahead >= 2 && board.get(i).equals(p) && board.get(ahead).equals(empty)){
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveAhead);
+							GameTreeNode gtn = new GameTreeNode(moveAhead, true);
 							newBoards.add(gtn);
-							//newBoards.add(moveAhead);
-							//printAsBoard(moveAhead);
-							//printMove(i, ahead, p);
 						}
-						if(ldiag > goal && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
-							System.out.println("W CAN MOVE LEFT");
+						if(ldiag >= 1 && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
 							List<String> moveLeftDiag = new ArrayList<String>(board);
 							moveLeftDiag.set(ldiag, moveLeftDiag.get(i));
 							moveLeftDiag.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveLeftDiag);
+							GameTreeNode gtn = new GameTreeNode(moveLeftDiag, true);
 							newBoards.add(gtn);
-							//newBoards.add(moveLeftDiag);
-							//printAsBoard(moveLeftDiag);
-							//printMove(i, ldiag, p);
 						}
 					}
 					//middle
 					else{
-						System.out.println("W @ MIDDLE SLOT");
-						if( ahead > goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
-							System.out.println("W CAN MOVE FORWARD");
+						if( ahead >= 1 && board.get(i).equals(p) && board.get(ahead).equals(empty)){
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveAhead);
+							GameTreeNode gtn = new GameTreeNode(moveAhead, true);
 							newBoards.add(gtn);
-							//newBoards.add(moveAhead);
-							//printAsBoard(moveAhead);
-							//printMove(i, ahead, p);
 						}
-						if(rdiag > goal && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
-							System.out.println("W CAN MOVE RIGHT");
+						if(rdiag >= 2 && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
 							List<String> moveRightDiag = new ArrayList<String>(board);
 							moveRightDiag.set(rdiag, moveRightDiag.get(i));
 							moveRightDiag.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveRightDiag);
+							GameTreeNode gtn = new GameTreeNode(moveRightDiag, true);
 							newBoards.add(gtn);
-							//newBoards.add(moveRightDiag);
-							//printAsBoard(moveRightDiag);
-							//printMove(i, rdiag, p);
 
 						}
-						if(ldiag >= goal && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
-							System.out.println("W CAN MOVE LEFT");
+						if(ldiag >= 0 && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
 							List<String> moveLeftDiag = new ArrayList<String>(board);
 							moveLeftDiag.set(ldiag, moveLeftDiag.get(i));
 							moveLeftDiag.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveLeftDiag);
+							GameTreeNode gtn = new GameTreeNode(moveLeftDiag, true);
 							newBoards.add(gtn);
-							//newBoards.add(moveLeftDiag);
-							//printAsBoard(moveLeftDiag);
-							//printMove(i, ldiag, p);
 						}
 					}
 				}
@@ -182,115 +265,102 @@ public class GameTreeNode {
 			else {
 				for(int i = 0; i < board.size(); i++){
 
-					int goal = board.size();
+					//int goal = board.size();
 					int ahead = i+3;
-					int ldiag = i+2;
-					int rdiag = i+4;
+					int ldiag = i+4;
+					int rdiag = i+2;
 
-					//System.out.println(p+" "+board.get(i)+": "+board.get(i).equals(p)+" space "+i+" goal "+goal+", ahead "+ahead+", rdiag "+rdiag+", ldiag "+ldiag);
 					//if the current slot is on the far left
-					if(i % 3 == 0){
+					if((i+1) % 3 == 0){
 
-						if( ahead < goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
+						if( (ahead <= 17) && board.get(i).equals(p) && board.get(ahead).equals(empty)){
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveAhead);
-							//newBoards.add(moveAhead);
+							GameTreeNode gtn = new GameTreeNode(moveAhead, false);
 							newBoards.add(gtn);
-							//printAsBoard(moveAhead);
-							//printMove(i, ahead, p);
 						}
-						if(rdiag < goal && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
+						if((rdiag <= 16) && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
 							List<String> moveRightDiag = new ArrayList<String>(board);
 							moveRightDiag.set(rdiag, moveRightDiag.get(i));
 							moveRightDiag.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveRightDiag);
-							newBoards.add(gtn);
-							//printAsBoard(moveRightDiag);
-							//printMove(i, rdiag, p);
-						}
+							GameTreeNode gtn = new GameTreeNode(moveRightDiag, false);
+							newBoards.add(gtn);						}
 					}
 					//far right
-					else if((i+1) % 3 == 0){
-						if( ahead < goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
+					else if(i % 3 == 0){
+						if( (ahead <= 15) && board.get(i).equals(p) && board.get(ahead).equals(empty)){
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveAhead);
+							GameTreeNode gtn = new GameTreeNode(moveAhead, false);
 							newBoards.add(gtn);
-							//printAsBoard(moveAhead);
-							//printMove(i, ahead, p);
 						}
-						if(ldiag < goal && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
+						if((ldiag <= 16) && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
 							List<String> moveLeftDiag = new ArrayList<String>(board);
 							moveLeftDiag.set(ldiag, moveLeftDiag.get(i));
 							moveLeftDiag.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveLeftDiag);
+							GameTreeNode gtn = new GameTreeNode(moveLeftDiag, false);
 							newBoards.add(gtn);
-							//printAsBoard(moveLeftDiag);
-							//printMove(i, ldiag, p);
 						}
 					}
 					//middle
 					else{
-						if( ahead < goal && board.get(i).equals(p) && board.get(ahead).equals(empty)){
+						if( (ahead <= 16) && board.get(i).equals(p) && board.get(ahead).equals(empty)){
 							List<String> moveAhead = new ArrayList<String>(board);
 							moveAhead.set(ahead, moveAhead.get(i));
 							moveAhead.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveAhead);
+							GameTreeNode gtn = new GameTreeNode(moveAhead, false);
 							newBoards.add(gtn);
-							//printAsBoard(moveAhead);
-							//printMove(i, ahead, p);
 						}
-						if(rdiag < goal && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
+						if((rdiag <= 15) && board.get(i).equals(p) && !board.get(rdiag).equals(p)){
 							List<String> moveRightDiag = new ArrayList<String>(board);
 							moveRightDiag.set(rdiag, moveRightDiag.get(i));
 							moveRightDiag.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveRightDiag);
+							GameTreeNode gtn = new GameTreeNode(moveRightDiag, false);
 							newBoards.add(gtn);
-							//printAsBoard(moveRightDiag);
-							//printMove(i, rdiag, p);
-
 						}
-						if(ldiag <= goal && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
+						if((ldiag < 17) && board.get(i).equals(p) && !board.get(ldiag).equals(p)){
 							List<String> moveLeftDiag = new ArrayList<String>(board);
 							moveLeftDiag.set(ldiag, moveLeftDiag.get(i));
 							moveLeftDiag.set(i, empty);
-							GameTreeNode gtn = new GameTreeNode(moveLeftDiag);
+							GameTreeNode gtn = new GameTreeNode(moveLeftDiag, false);
 							newBoards.add(gtn);
-							//printMove(i, ldiag, p);
 						}
 					}
 				}
 			}
 			return newBoards;
 		}
-		public int winState(){
+		public boolean winState(GameTreeNode gtn){
 			//all of one type of piece have been captured
-			if(!board.contains("B"))
-				return 1;
-			
-			if(!board.contains("W"))
-				return -1;
-			
+			if(!board.contains("B")){
+				gtn.score = 1;
+				return true;
+			}
+
+			if(!board.contains("W")){
+				gtn.score = -1;
+				return true;
+			}
+
 			//a player has reached the home of opponent
 			for(int i = 0; i < 3; i++){
 				if(board.get(i).equals("W")){
 					System.out.println("Winner is W by home row victory");
-					printAsBoard(board);
-					return 1;
+					gtn.score = 1;
+					return true;
 				}
 			}
 			for(int j = board.size()-1; j > 14; j--){
 				if(board.get(j).equals("B")){
 					System.out.println("Winner is B by home row victory");
-					printAsBoard(board);
-					return -1;
+					gtn.score = -1;
+					return true;
 				}
 			}
 
-			return 0;
+			return false;
 		}
 		public void printMove(int from, int to, String player){
 			System.out.print(player+" moved from "+placeValues.get(from)+" to "+placeValues.get(to));

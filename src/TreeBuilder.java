@@ -17,14 +17,16 @@ public class TreeBuilder {
 	public GameTree initTree() throws IOException { 
 		
 		List<String> lines = new ArrayList<String>();
+		//char[][] slots;
 		reader = new BufferedReader(new FileReader(path));
 		
 		String line = null;
 		while ((line = reader.readLine()) != null) {
 			lines.add(line);
+			
 		}
 		GameTree gt = new GameTree(lines);
-		int result = gt.maxValue(gt.getRoot(), 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		int result = gt.maxValue(gt.getRoot(), 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
 		System.out.println("THE RESULT IS "+result);
 		return gt;
 	}
