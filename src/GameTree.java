@@ -17,14 +17,14 @@ public class GameTree {
 		return this.root;
 	}
 
-	public int maxValue(GameTreeNode gtn, int player, int alpha, int beta, int depth){
+	public int maxValue(GameTreeNode gtn, int alpha, int beta, int depth){
 		System.out.println("At a depth of "+depth);
-		if(gtn.isTerminal()){
+		if(gtn.isEndGame()){
 			return gtn.score;
 		}
-		gtn.addChildren(findLegalMoves(gtn, 1));
+		findLegalMoves(gtn);
 		for(GameTreeNode n : gtn.children){
-			n.score = Math.max(n.score, minValue(n,2, alpha, beta, depth+1));
+			n.score = Math.max(n.score, minValue(n,alpha, beta, depth+1));
 			alpha = Math.max(alpha, n.score);
 			System.err.println("alpha: "+alpha);
 			if(alpha >= beta){
@@ -36,14 +36,14 @@ public class GameTree {
 
 	
 	
-	public int minValue(GameTreeNode gtn, int player, int alpha, int beta, int depth){
+	public int minValue(GameTreeNode gtn, int alpha, int beta, int depth){
 		System.out.println("At a depth of "+depth);
-		if(gtn.isTerminal()){
+		if(gtn.isEndGame()){
 			return gtn.score;
 		}
-		gtn.addChildren(findLegalMoves(gtn, 2));
+		findLegalMoves(gtn);
 		for(GameTreeNode n : gtn.children){
-			n.score = Math.min(n.score, maxValue(n,1, alpha, beta, depth+1));
+			n.score = Math.min(n.score, maxValue(n, alpha, beta, depth+1));
 			beta = Math.min(beta, n.score);
 			System.err.println("beta: "+beta);
 			if(beta <= alpha){
@@ -52,23 +52,8 @@ public class GameTree {
 		}
 		return beta;
 	}
-	
-	public List<GameTreeNode> findLegalMoves(GameTreeNode gtn, int player){
-		List<GameTreeNode> children = new ArrayList<GameTreeNode>(gtn.board.legalMoves(player));
-		return children;
-
-	}
-	public int switchPlayer(int player){
-		switch(player){
-		case 0:
-			return 1;
-		case 1:
-			return 2;
-		case 2:
-			return 0;
-		default:
-			return 0;
-		}
+	public void findLegalMoves(GameTreeNode gtn){
+		gtn.board.makeLegalMoves(gtn);
 	}
 	public void print(){
 		System.out.println("Root config is: ");

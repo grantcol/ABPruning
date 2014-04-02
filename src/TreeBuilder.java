@@ -26,7 +26,7 @@ public class TreeBuilder {
 			
 		}
 		GameTree gt = new GameTree(lines);
-		int result = gt.maxValue(gt.getRoot(), 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
+		int result = gt.maxValue(gt.getRoot(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
 		System.out.println("THE RESULT IS "+result);
 		return gt;
 	}
