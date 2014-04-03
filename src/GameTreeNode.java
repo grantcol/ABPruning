@@ -10,7 +10,7 @@ public class GameTreeNode {
 	public List<GameTreeNode> children;
 	public Board board;
 	public boolean maxToMove;
-	public int score;
+	public int score = 0;
 
 	public GameTreeNode(List<String> initConfig, boolean maxToMove){
 		this.children = new ArrayList<GameTreeNode>();
@@ -69,13 +69,14 @@ public class GameTreeNode {
 		}
 		return false;
 	}
-
+	public void printChildren(){
+		System.out.println("# of children is: "+children.size());
+	}
 
 
 
 	public class Board {
 		//board spaces read from the top down ie (0,0) = 0 (0,1) = 1
-		public List<String> board = new ArrayList<String>();
 		public char[][] boardState = new char[6][3]; 
 		Map<Integer, String> placeValues = new HashMap<Integer, String>();
 
@@ -99,17 +100,6 @@ public class GameTreeNode {
 			placeValues.put(15, "(5,0)");
 			placeValues.put(16, "(5,1)");
 			placeValues.put(17, "(5,2)");
-
-			for(int i = 0; i < rows.size(); i++){
-
-				String[] slots = rows.get(i).split("");
-				for(String s : slots) {
-					if(!s.isEmpty()){ //this a pretty shitty way to guard against newline
-						this.board.add(s);
-					}
-				}
-
-			}
 		}
 		public Board(List<String> rows, boolean dumb){
 			for(int i = 0; i < 6; i++){
@@ -146,19 +136,22 @@ public class GameTreeNode {
 
 									//forward
 									if(node.board.boardState[i-1][j] == empty){
-										GameTreeNode move = new GameTreeNode(node.board, true);
+										System.out.println("space ("+(i-1)+","+j+") is empty");
+										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i-1][j+1] == empty || node.board.boardState[i-1][j+1] == opp){
-										GameTreeNode move = new GameTreeNode(node.board, true);
+										System.out.println("space ("+(i-1)+","+(j+1)+") has an enemy or is empty");
+										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j+1] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i-1][j-1] == empty || node.board.boardState[i-1][j-1] == opp){
-										GameTreeNode move = new GameTreeNode(node.board,true);
+										System.out.println("space ("+(i-1)+","+(j-1)+") has an enemy or is empty");
+										GameTreeNode move = new GameTreeNode(node.board,false);
 										move.board.boardState[i-1][j-1] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
@@ -168,13 +161,15 @@ public class GameTreeNode {
 								else if(j == 0){
 									//we are in the left column we can move rdiag and fwd
 									if(node.board.boardState[i-1][j] == empty){
-										GameTreeNode move = new GameTreeNode(node.board, true);
+										System.out.println("space ("+(i-1)+","+j+") is empty");
+										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i-1][j+1] == empty || node.board.boardState[i-1][j+1] == opp){
-										GameTreeNode move = new GameTreeNode(node.board, true);
+										System.out.println("space ("+(i-1)+","+(j+1)+") has an enemy");
+										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j+1] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
@@ -183,13 +178,15 @@ public class GameTreeNode {
 								else if(j == 2){
 									//we are in the right column we can move ldiag and fwd
 									if(node.board.boardState[i-1][j] == empty){
-										GameTreeNode move = new GameTreeNode(node.board, true);
+										System.out.println("space ("+(i-1)+","+j+") is empty");
+										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i-1][j-1] == empty || node.board.boardState[i-1][j-1] == opp){
-										GameTreeNode move = new GameTreeNode(node.board, true);
+										System.out.println("space ("+(i-1)+","+(j-1)+") has an enemy");
+										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j-1] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
@@ -211,19 +208,19 @@ public class GameTreeNode {
 								if(j == 1){
 									//middle
 									if(node.board.boardState[i+1][j] == empty){
-										GameTreeNode move = new GameTreeNode(node.board, false);
+										GameTreeNode move = new GameTreeNode(node.board, true);
 										move.board.boardState[i+1][j] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i+1][j-1] == empty || node.board.boardState[i+1][j-1] == opp){
-										GameTreeNode move = new GameTreeNode(node.board, false);
+										GameTreeNode move = new GameTreeNode(node.board, true);
 										move.board.boardState[i+1][j-1] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i+1][j+1] == empty || node.board.boardState[i+1][j+1] == opp){
-										GameTreeNode move = new GameTreeNode(node.board,false);
+										GameTreeNode move = new GameTreeNode(node.board,true);
 										move.board.boardState[i+1][j+1] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
@@ -232,13 +229,13 @@ public class GameTreeNode {
 								else if(j == 0){
 									//right
 									if(node.board.boardState[i+1][j] == empty){
-										GameTreeNode move = new GameTreeNode(node.board, false);
+										GameTreeNode move = new GameTreeNode(node.board, true);
 										move.board.boardState[i+1][j] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i+1][j+1] == empty || node.board.boardState[i+1][j+1] == opp){
-										GameTreeNode move = new GameTreeNode(node.board, false);
+										GameTreeNode move = new GameTreeNode(node.board, true);
 										move.board.boardState[i+1][j+1] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
@@ -246,13 +243,13 @@ public class GameTreeNode {
 								}
 								else if(j == 2){
 									if(node.board.boardState[i+1][j] == empty){
-										GameTreeNode move = new GameTreeNode(node.board, false);
+										GameTreeNode move = new GameTreeNode(node.board, true);
 										move.board.boardState[i+1][j] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i+1][j-1] == empty || node.board.boardState[i+1][j-1] == opp){
-										GameTreeNode move = new GameTreeNode(node.board, false);
+										GameTreeNode move = new GameTreeNode(node.board, true);
 										move.board.boardState[i+1][j-1] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
