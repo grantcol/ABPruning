@@ -136,21 +136,21 @@ public class GameTreeNode {
 
 									//forward
 									if(node.board.boardState[i-1][j] == empty){
-										System.out.println("space ("+(i-1)+","+j+") is empty");
+										//System.out.println("space ("+(i-1)+","+j+") is empty");
 										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i-1][j+1] == empty || node.board.boardState[i-1][j+1] == opp){
-										System.out.println("space ("+(i-1)+","+(j+1)+") has an enemy or is empty");
+										//System.out.println("space ("+(i-1)+","+(j+1)+") has an enemy or is empty");
 										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j+1] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i-1][j-1] == empty || node.board.boardState[i-1][j-1] == opp){
-										System.out.println("space ("+(i-1)+","+(j-1)+") has an enemy or is empty");
+										//System.out.println("space ("+(i-1)+","+(j-1)+") has an enemy or is empty");
 										GameTreeNode move = new GameTreeNode(node.board,false);
 										move.board.boardState[i-1][j-1] = self;
 										move.board.boardState[i][j] = empty;
@@ -161,14 +161,14 @@ public class GameTreeNode {
 								else if(j == 0){
 									//we are in the left column we can move rdiag and fwd
 									if(node.board.boardState[i-1][j] == empty){
-										System.out.println("space ("+(i-1)+","+j+") is empty");
+										//System.out.println("space ("+(i-1)+","+j+") is empty");
 										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i-1][j+1] == empty || node.board.boardState[i-1][j+1] == opp){
-										System.out.println("space ("+(i-1)+","+(j+1)+") has an enemy");
+										//System.out.println("space ("+(i-1)+","+(j+1)+") has an enemy");
 										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j+1] = self;
 										move.board.boardState[i][j] = empty;
@@ -178,14 +178,14 @@ public class GameTreeNode {
 								else if(j == 2){
 									//we are in the right column we can move ldiag and fwd
 									if(node.board.boardState[i-1][j] == empty){
-										System.out.println("space ("+(i-1)+","+j+") is empty");
+										//System.out.println("space ("+(i-1)+","+j+") is empty");
 										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j] = self;
 										move.board.boardState[i][j] = empty;
 										node.addChild(move);
 									}
 									if(node.board.boardState[i-1][j-1] == empty || node.board.boardState[i-1][j-1] == opp){
-										System.out.println("space ("+(i-1)+","+(j-1)+") has an enemy");
+										//System.out.println("space ("+(i-1)+","+(j-1)+") has an enemy");
 										GameTreeNode move = new GameTreeNode(node.board, false);
 										move.board.boardState[i-1][j-1] = self;
 										move.board.boardState[i][j] = empty;

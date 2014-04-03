@@ -17,20 +17,21 @@ public class GameTree {
 	}
 
 	public int maxValue(GameTreeNode gtn, int alpha, int beta, int depth){
-		System.out.println("At a depth of "+depth);
+		//System.out.println("At a depth of "+depth);
+		System.out.println(".");
 		if(gtn.isEndGame()){
 			return gtn.score;
 		}
 		findLegalMoves(gtn);
-		gtn.printChildren();
-		System.out.println("EXPANDING");
-		gtn.board.print();
-		System.out.println("______________ ");
+		//gtn.printChildren();
+		//System.out.println("EXPANDING");
+		//gtn.board.print();
+		//System.out.println("______________ ");
 		for(GameTreeNode n : gtn.children){
-			n.board.print();
+			//n.board.print();
 			//n.score = Math.max(alpha, minValue(n,alpha, beta, depth+1));
 			alpha = Math.max(alpha, minValue(n,alpha, beta, depth+1));
-			System.err.println("alpha: "+alpha);
+			//System.err.println("alpha: "+alpha);
 			if(alpha >= beta){
 				return alpha;
 			}
@@ -39,20 +40,21 @@ public class GameTree {
 	}
 	
 	public int minValue(GameTreeNode gtn, int alpha, int beta, int depth){
-		System.out.println("At a depth of "+depth);
+		//System.out.println("At a depth of "+depth);
+		System.out.println(".");
 		if(gtn.isEndGame()){
 			return gtn.score;
 		}
 		findLegalMoves(gtn);
-		gtn.printChildren();
-		System.out.println("EXPANDING");
-		gtn.board.print();
-		System.out.println("______________ ");
+		//gtn.printChildren();
+		//System.out.println("EXPANDING");
+		//gtn.board.print();
+		//System.out.println("______________ ");
 		for(GameTreeNode n : gtn.children){
-			n.board.print();
-			n.score = Math.min(beta, maxValue(n, alpha, beta, depth+1));
+			//n.board.print();
+			//n.score = Math.min(beta, maxValue(n, alpha, beta, depth+1));
 			beta = Math.min(beta, maxValue(n, alpha, beta, depth+1));
-			System.err.println("beta: "+beta);
+			//System.err.println("beta: "+beta);
 			if(beta <= alpha){
 				return beta;
 			}
