@@ -83,7 +83,6 @@ public class GameTreeNode {
 
 		}
 		public Board(List<String> rows, boolean dumb){
-			populatePlaceLabels();
 			for(int i = 0; i < 6; i++){
 				for(int j = 0; j < 3; j++){
 					this.boardState[i][j] = rows.get(i).charAt(j);
@@ -91,7 +90,6 @@ public class GameTreeNode {
 			}
 		}
 		public Board(Board b){
-			populatePlaceLabels();
 			for(int i = 0; i < 6; i++){
 				for(int j = 0; j < 3; j++){
 					this.boardState[i][j] = b.boardState[i][j];
@@ -252,26 +250,6 @@ public class GameTreeNode {
 			
 			return moveString;
 			
-		}
-		public void populatePlaceLabels(){
-			placeValues.put(0, "(0,0)");
-			placeValues.put(1, "(0,1)");
-			placeValues.put(2, "(0,2)");
-			placeValues.put(3, "(1,0)");
-			placeValues.put(4, "(1,1)");
-			placeValues.put(5, "(1,2)");
-			placeValues.put(6, "(2,0)");
-			placeValues.put(7, "(2,1)");
-			placeValues.put(8, "(2,2)");
-			placeValues.put(9, "(3,0)");
-			placeValues.put(10, "(3,1)");
-			placeValues.put(11, "(3,2)");
-			placeValues.put(12, "(4,0)");
-			placeValues.put(13, "(4,1)");
-			placeValues.put(14, "(4,2)");
-			placeValues.put(15, "(5,0)");
-			placeValues.put(16, "(5,1)");
-			placeValues.put(17, "(5,2)");
 		}
 		public void printMove(int from, int to, String player){
 			System.out.print(player+" moved from "+placeValues.get(from)+" to "+placeValues.get(to));

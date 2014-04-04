@@ -28,7 +28,7 @@ public class GameTree {
 	}
 	public int maxValue(GameTreeNode gtn, int alpha, int beta, int depth){
 		if(gtn.isEndGame()){
-			System.err.println(gtn.score);
+			//System.err.println(gtn.score);
 			return gtn.score;
 		}
 		findLegalMoves(gtn);
@@ -46,7 +46,7 @@ public class GameTree {
 
 	public int minValue(GameTreeNode gtn, int alpha, int beta, int depth){
 		if(gtn.isEndGame()){
-			System.err.println(gtn.score);
+			//System.err.println(gtn.score);
 			return gtn.score;
 		}
 		findLegalMoves(gtn);
