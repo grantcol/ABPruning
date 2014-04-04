@@ -6,12 +6,12 @@ import java.util.Map;
 
 public class GameTreeNode {
 
-	//public String moveDescription;
 	public List<GameTreeNode> children;
 	public Board board;
 	public boolean maxToMove;
 	public String moveDiff;
 	public int score = 0;
+	//public 
 
 	public GameTreeNode(List<String> initConfig, boolean maxToMove, String diff){
 		this.children = new ArrayList<GameTreeNode>();
@@ -219,6 +219,7 @@ public class GameTreeNode {
 									}
 								}
 								else if(j == 2){
+									//left
 									if(node.board.boardState[i+1][j] == empty){
 										GameTreeNode move = new GameTreeNode(node.board, true, buildMoveString(i,j,(i+1), j, false));
 										move.board.boardState[i+1][j] = self;
