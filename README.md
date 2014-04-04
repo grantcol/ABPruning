@@ -13,7 +13,7 @@ You may run the executable .jar file included in the directory. Alternatively yo
 <pre>
 javac Main.java 
 java Main
-<pre>
+</pre>
 
 ##Issues
 
