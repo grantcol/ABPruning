@@ -17,7 +17,6 @@ public class TreeBuilder {
 	public GameTree initTree() throws IOException { 
 		
 		List<String> lines = new ArrayList<String>();
-		//char[][] slots;
 		reader = new BufferedReader(new FileReader(path));
 		
 		String line = null;
@@ -27,7 +26,9 @@ public class TreeBuilder {
 		}
 		GameTree gt = new GameTree(lines);
 		int result = gt.maxValue(gt.getRoot(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
-		System.out.println("THE RESULT IS "+result);
+		gt.setRootScore(result);
+		System.out.println(" ");
+		System.out.println("The best move for player A is for "+gt.findBestMove());
 		return gt;
 	}
 }
