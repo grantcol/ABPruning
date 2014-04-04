@@ -28,7 +28,7 @@ public class TreeBuilder {
 		int result = gt.maxValue(gt.getRoot(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
 		gt.setRootScore(result);
 		System.out.println(" ");
-		System.out.println("The best move for player A is for "+gt.findBestMove());
+		System.out.println("The best initial move is "+gt.findBestMove());
 		return gt;
 	}
 }

@@ -1,12 +1,8 @@
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GameTree {
 
 	private GameTreeNode root;
-	public Map<Integer,String> bestMoves = new HashMap<Integer, String>();
 	
 	public GameTree(){
 		root = new GameTreeNode();
@@ -39,7 +35,6 @@ public class GameTree {
 		for(GameTreeNode n : gtn.children){
 			System.out.println(n.moveDiff);
 			alpha = Math.max(alpha, minValue(n,alpha, beta, depth+1));
-			System.out.println("THE SCORE "+n.score);
 			n.score = alpha;
 			if(alpha >= beta){
 				System.err.println("Skipping "+n.moveDiff);
@@ -59,7 +54,6 @@ public class GameTree {
 			System.out.println(n.moveDiff);
 			beta = Math.min(beta, maxValue(n, alpha, beta, depth+1));
 			n.score = beta;
-			System.out.println("THE SCORE "+n.score);
 			if(beta <= alpha){
 				System.err.println("Skipping "+n.moveDiff);
 				return beta;
