@@ -10,8 +10,7 @@ public class GameTreeNode {
 	public Board board;
 	public boolean maxToMove;
 	public String moveDiff;
-	public int score = 0;
-	//public 
+	public int score;
 
 	public GameTreeNode(List<String> initConfig, boolean maxToMove, String diff){
 		this.children = new ArrayList<GameTreeNode>();
@@ -42,11 +41,11 @@ public class GameTreeNode {
 		int blackCount = 0;
 		for(int i = 0; i < 3; i++){
 			if(this.board.boardState[0][i] == 'W'){
-				this.score = 1;
+				score = 1;
 				return true;
 			}
 			else if(this.board.boardState[5][i] == 'B'){
-				this.score = -1;
+				score = -1;
 				return true;
 			}
 		}
@@ -61,11 +60,11 @@ public class GameTreeNode {
 			}
 		}
 		if(whiteCount == 0){
-			this.score = -1;
+			score = -1;
 			return true;
 		}
 		else if(blackCount == 0){
-			this.score = 1;
+			score = 1;
 			return true;
 		}
 		return false;

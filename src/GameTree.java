@@ -1,10 +1,12 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameTree {
 
 	private GameTreeNode root;
-	public List<String> bestMoves = new ArrayList<String>();
+	public Map<Integer,String> bestMoves = new HashMap<Integer, String>();
 	
 	public GameTree(){
 		root = new GameTreeNode();
@@ -21,23 +23,24 @@ public class GameTree {
 		root.score = val;
 	}
 	public String findBestMove(){
-		for(String n : bestMoves){
-			System.out.println(n);
-			return n;
+		for(GameTreeNode n : root.children){
+			if(n.score == 1){
+				return n.moveDiff;
+			}
 		}
 		return "You will lose";
 	}
 	public int maxValue(GameTreeNode gtn, int alpha, int beta, int depth){
 		if(gtn.isEndGame()){
-			if(depth == 1){
-				bestMoves.add(gtn.moveDiff);
-			}
+			System.err.println(gtn.score);
 			return gtn.score;
 		}
 		findLegalMoves(gtn);
 		for(GameTreeNode n : gtn.children){
 			System.out.println(n.moveDiff);
 			alpha = Math.max(alpha, minValue(n,alpha, beta, depth+1));
+			System.out.println("THE SCORE "+n.score);
+			n.score = alpha;
 			if(alpha >= beta){
 				System.err.println("Skipping "+n.moveDiff);
 				return alpha;
@@ -48,12 +51,15 @@ public class GameTree {
 
 	public int minValue(GameTreeNode gtn, int alpha, int beta, int depth){
 		if(gtn.isEndGame()){
+			System.err.println(gtn.score);
 			return gtn.score;
 		}
 		findLegalMoves(gtn);
 		for(GameTreeNode n : gtn.children){
 			System.out.println(n.moveDiff);
 			beta = Math.min(beta, maxValue(n, alpha, beta, depth+1));
+			n.score = beta;
+			System.out.println("THE SCORE "+n.score);
 			if(beta <= alpha){
 				System.err.println("Skipping "+n.moveDiff);
 				return beta;
